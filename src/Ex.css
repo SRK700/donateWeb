@@ -1,0 +1,11 @@
+.my-component-container {
+    background: #f1f1f1;
+    padding: 20px;
+  }
+  
+  .my-component-table,tr,td {
+    border: 1px solid black;
+    border-collapse: collapse;
+
+  }
+
