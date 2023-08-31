@@ -4,11 +4,8 @@ import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 
-// ... (rest of the component remains the same)
-
 const CreatePlace = () => {
   const [formData, setFormData] = useState({
-    item_id: "",
     item_name: "",
     item_description: "",
     item_image: "",
@@ -20,17 +17,49 @@ const CreatePlace = () => {
     const { name, value } = event.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [name]: name === "donation_date" ? formatDateString(value) : value,
     });
   };
 
-  const handleSubmit = (event) => {
+  const formatDateString = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = date.toISOString().split("T")[0];
+    return formattedDate;
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Your submit logic here
+
+    try {
+      const response = await fetch("http://localhost:81/donateAPI/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        // Clear the form and update the data on successful submission
+        setFormData({
+          item_name: "",
+          item_description: "",
+          item_image: "",
+          quantity: "",
+          donation_date: "",
+        });
+
+        // Perform any other actions you need after successful submission
+      } else {
+        console.error("Error posting data:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Error posting data:", error);
+    }
   };
 
   const handleFormClose = () => {
-    // Handle closing the form
+    // Handle closing the form if needed
   };
 
   return (
@@ -44,7 +73,7 @@ const CreatePlace = () => {
       >
         <form onSubmit={handleSubmit} style={{ maxWidth: "400px", width: "100%" }}>
           <TextField
-            label="Item Name"
+            label="ชื่อสิ่งของ"
             name="item_name"
             value={formData.item_name}
             onChange={handleInputChange}
@@ -52,7 +81,7 @@ const CreatePlace = () => {
             style={{ marginBottom: "10px" }}
           />
           <TextField
-            label="Description"
+            label="รายละเอียด"
             name="item_description"
             value={formData.item_description}
             onChange={handleInputChange}
@@ -62,7 +91,7 @@ const CreatePlace = () => {
             style={{ marginBottom: "10px" }}
           />
           <TextField
-            label="Image URL"
+            label="รูปภาพ(URL)"
             name="item_image"
             value={formData.item_image}
             onChange={handleInputChange}
@@ -70,7 +99,7 @@ const CreatePlace = () => {
             style={{ marginBottom: "10px" }}
           />
           <TextField
-            label="Quantity"
+            label="จำนวน"
             name="quantity"
             value={formData.quantity}
             onChange={handleInputChange}
@@ -78,7 +107,7 @@ const CreatePlace = () => {
             style={{ marginBottom: "10px" }}
           />
           <TextField
-            label="Donation Date"
+
             name="donation_date"
             type="date"
             value={formData.donation_date}

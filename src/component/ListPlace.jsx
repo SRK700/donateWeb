@@ -13,7 +13,7 @@ import DetailById from "./DetailById"; // Import DetailById
 function ListPlace({ serverName }) {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage] = useState(6);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredItems, setFilteredItems] = useState([]);
   const [showDonationForm, setShowDonationForm] = useState(false);
